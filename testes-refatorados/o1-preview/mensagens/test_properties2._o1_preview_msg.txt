@@ -1,0 +1,48 @@
+Pensou por 13 segundos
+
+Claro! Aqui está o código de teste refatorado:
+
+```python
+import pytest
+from lottie.objects.properties import KeyframeBezier, Keyframe, AnimatableMixin
+
+class TestKeyframeBezier:
+    def test_from_keyframe(self):
+        """Testa a criação de KeyframeBezier a partir de um Keyframe."""
+        keyframe = Keyframe()
+        keyframe.out_value = 1
+        keyframe.in_value = 2
+        obj = KeyframeBezier.from_keyframe(keyframe)
+        assert obj.h1 == 1
+        assert obj.h2 == 2
+
+class TestAnimatableMixin:
+    def test_clear_animation(self):
+        """Testa o método clear_animation do AnimatableMixin."""
+        obj = AnimatableMixin()
+        obj.clear_animation(123)
+        assert obj.value == 123
+        assert obj.animated is False
+        assert obj.keyframes is None
+```
+
+**Alterações realizadas:**
+
+1. **Organização em Classes:** Agrupei os testes em classes `TestKeyframeBezier` e `TestAnimatableMixin` para melhorar a organização e facilitar a manutenção.
+
+2. **Remoção de Importações Desnecessárias:** Removi a importação de `OffsetKeyframe`, já que não estava sendo utilizado nos testes.
+
+3. **Uso de `is None` e `is False`:** Substituí `== None` por `is None` e `== False` por `is False`, seguindo as melhores práticas do Python para comparações com `None` e booleanos.
+
+4. **Adição de Docstrings:** Adicionei docstrings aos métodos de teste para descrever o propósito de cada um, melhorando a legibilidade.
+
+5. **Nomes de Métodos Descritivos:** Renomeei os métodos de teste para serem mais claros e descritivos sobre o que estão testando.
+
+**Benefícios da Refatoração:**
+
+- **Melhor Organização:** Agrupar testes relacionados em classes facilita a localização e manutenção de testes específicos.
+- **Código Mais Limpo:** Remover importações desnecessárias torna o código mais conciso e evita confusões.
+- **Boas Práticas de Python:** Usar `is None` e `is False` é mais idiomático em Python e evita potenciais bugs.
+- **Legibilidade Aprimorada:** Docstrings e nomes de métodos descritivos tornam o código mais fácil de entender para outros desenvolvedores.
+
+Essas alterações alinham o código de teste com as melhores práticas de desenvolvimento em Python, tornando-o mais sustentável e fácil de expandir no futuro.

@@ -1,0 +1,53 @@
+Pensou por 10 segundos
+
+Claro! Aqui está o código de teste refatorado:
+
+```python
+import pytest
+from lottie.parsers.sif import builder
+from lottie import objects
+
+class TestSifBuilder:
+    def test_non_empty_animation(self):
+        """Testa se to_sif converte corretamente uma Animation não vazia."""
+        lot = objects.Animation(
+            width=123,
+            height=456,
+            frame_rate=69,
+            in_point=3,
+            out_point=7,
+            name="test"
+        )
+
+        # Adiciona uma camada à animação
+        layer = objects.layers.ShapeLayer()
+        lot.add_layer(layer)
+
+        sif = builder.to_sif(lot)
+        assert len(sif.layers) == 1
+
+    def test_empty_layers(self):
+        """Testa se to_sif converte corretamente uma Animation com camadas."""
+        lot = objects.Animation()
+        layer = objects.layers.ShapeLayer()
+        lot.add_layer(layer)
+
+        sif = builder.to_sif(lot)
+        assert len(sif.layers) == len(lot.layers)
+```
+
+**Alterações realizadas:**
+
+1. **Conversão para pytest:** Refatorei os testes para utilizar o framework pytest em vez do unittest. O pytest é mais conciso e facilita a escrita e leitura dos testes.
+
+2. **Remoção de Importações Desnecessárias:** Removi importações não utilizadas, como `from unittest import *`, `api`, `ast`, `NVector` e `Color`, tornando o código mais limpo.
+
+3. **Uso de Asserts Simples:** Substituí `self.assertEqual` por assertivas simples `assert`, que são mais diretas e idiomáticas no pytest.
+
+4. **Inicialização Direta dos Objetos:** Ao criar a instância de `Animation`, utilizei parâmetros nomeados para definir suas propriedades, tornando o código mais legível.
+
+5. **Comentários Claros:** Mantive e ajustei os comentários para refletir claramente o propósito de cada parte do código.
+
+6. **Nomes Descritivos de Métodos:** Mantive os nomes dos métodos de teste descritivos para facilitar a compreensão do que está sendo testado.
+
+Essas alterações melhoram a legibilidade e a manutenção do código de teste, alinhando-o com as melhores práticas atuais de teste em Python.

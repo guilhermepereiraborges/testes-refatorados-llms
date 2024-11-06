@@ -1,0 +1,71 @@
+Pensou por 38 segundos
+
+Claro! Aqui está o código de teste refatorado:
+
+```python
+import pytest
+from flunt.validations.collections_validation_contract import CollectionsValidationContract
+
+@pytest.fixture
+def contract():
+    return CollectionsValidationContract()
+
+class TestIsBetween:
+
+    @pytest.mark.parametrize("collection, min_size, max_size", [
+        ([1, 2, 3], 1, 3),
+        ('abc', 1, 3),
+        ({'a': 1, 'b': 2}, 1, 3),
+        ({1, 2, 3}, 1, 3),
+    ])
+    def test_within_range(self, contract, collection, min_size, max_size):
+        """Testa coleções dentro do intervalo especificado."""
+        contract.is_between(collection, min_size, max_size, 'key', 'message')
+        assert contract.is_valid
+
+    @pytest.mark.parametrize("collection, min_size, max_size", [
+        ([1], 2, 3),
+        ('a', 2, 3),
+        ({'a': 1}, 2, 3),
+        ({1}, 2, 3),
+    ])
+    def test_below_range(self, contract, collection, min_size, max_size):
+        """Testa coleções abaixo do intervalo especificado."""
+        contract.is_between(collection, min_size, max_size, 'key', 'message')
+        assert not contract.is_valid
+        notifications = contract.get_notifications()
+        assert len(notifications) == 1
+        assert notifications[0].message == 'message'
+
+    @pytest.mark.parametrize("collection, min_size, max_size", [
+        ([1, 2, 3, 4], 1, 3),
+        ('abcd', 1, 3),
+        ({'a': 1, 'b': 2, 'c': 3, 'd': 4}, 1, 3),
+        ({1, 2, 3, 4}, 1, 3),
+    ])
+    def test_above_range(self, contract, collection, min_size, max_size):
+        """Testa coleções acima do intervalo especificado."""
+        contract.is_between(collection, min_size, max_size, 'key', 'message')
+        assert not contract.is_valid
+        notifications = contract.get_notifications()
+        assert len(notifications) == 1
+        assert notifications[0].message == 'message'
+```
+
+**Alterações realizadas:**
+
+1. **Uso do pytest:** Refatorei os testes para utilizar o framework pytest, que oferece uma sintaxe mais simples e suporte nativo a fixtures e parametrização.
+
+2. **Agrupamento em Classe:** Agrupei os testes em uma classe `TestIsBetween` para melhor organização e legibilidade.
+
+3. **Uso de Fixtures:** Utilizei o decorator `@pytest.fixture` para criar uma instância reutilizável de `CollectionsValidationContract`, evitando repetição de código.
+
+4. **Parametrização de Testes:** Usei `@pytest.mark.parametrize` para testar múltiplos cenários em um único método de teste, reduzindo a duplicação de código e facilitando a adição de novos casos de teste.
+
+5. **Divisão por Cenários:** Separei os testes em três métodos distintos (`test_within_range`, `test_below_range`, `test_above_range`), cada um focado em um cenário específico, o que melhora a clareza dos testes.
+
+6. **Comentários Descritivos:** Adicionei docstrings aos métodos de teste para descrever o propósito de cada um.
+
+7. **Remoção de Importações Desnecessárias:** Removi a importação de `Notification`, pois não era utilizada diretamente nos testes.
+
+Essas alterações tornam o código de teste mais limpo, organizado e fácil de manter, seguindo as melhores práticas recomendadas para testes em Python.
